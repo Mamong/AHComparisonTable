@@ -202,19 +202,24 @@ typedef enum :NSInteger {
     UIButton *button = (UIButton*)sender;
     NSInteger index = button.tag;
     [self.hiddenIndexes addObject:[NSString stringWithFormat:@"%ld",(long)index]];
-    // update cars table view
-    [self.carsTableView reloadData];
     
     // update header name data
     [self.headerNames removeObjectAtIndex:index];
-
+    
     // update header view
     [self updateTopHeaderView];
     
     // update filter button, when only one car or less, hide the filter button
     if ([self.headerNames count]<2) {
         self.navigationItem.rightBarButtonItem = nil;
+        if (_filter) {
+            _filter = NO;
+            self.parameters = self.originParameters;
+        }
     }
+    
+    // update cars table view
+    [self.carsTableView reloadData];
 }
 
 - (IBAction)leftIndicatorButtonTapped:(id)sender
